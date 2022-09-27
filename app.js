@@ -1,5 +1,10 @@
 const express = require('express');
 const app = express();
+const bodyParser = require("body-parser");
+
+//Middleware to execute before kickoff any action
+app.use(bodyParser.json());
+
 
 app.get('/', (req, resp) => {
 
