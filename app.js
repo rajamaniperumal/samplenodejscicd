@@ -5,8 +5,31 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const auth = require("./middleware/auth.js");
 
+const mongoose = require("mongoose");
+const uri = "mongodb+srv://mongodbadmin:Raja05mani@cluster0.fbusgnt.mongodb.net/?retryWrites=true&w=majority";
+const User = require("./models/user.js");
+
+
 //Middleware to execute before kickoff any action
 app.use(bodyParser.json());
+
+
+mongoose.connect(
+    process.env.MONGODB_URI || uri,
+    {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+    },
+    (err) => {
+        if (err) {
+            console.log(err);
+        } else {
+            console.log("Connected to MongoDB");
+        }
+    }
+);
+
+
 
 app.post("/api/welcome", auth, (req, res) => {
     res.status(200).send("Welcome 🙌 ");
@@ -46,7 +69,7 @@ app.post("/api/login", async (req, res) => {
             user.token = token;
 
             // user
-            res.status(200).json(user);
+            return res.status(200).json(user);
         }
         res.status(400).send("Invalid Credentials");
     } catch (err) {
